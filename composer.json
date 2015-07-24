@@ -1,0 +1,27 @@
+{
+    "name": "zadarma/user-api-v1",
+    "description": "PHP class for Zadarma API",
+    "keywords": [
+      "zadarma",
+      "api"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/zadarma/user-api-v1",
+    "authors": [
+        {
+            "name": "Zadarma",
+            "email": "github@zadarma.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+      "psr-4": {
+        "Zadarma_API\\": "src/"
+      }
+    }
+}

@@ -4,7 +4,7 @@ include_once 'include.php';
 
 $params = array(
     'start' => '2015-01-01 00:00:00',
-    'end' => '2015-31-01 00:00:00',
+    'end' => '2015-01-31 00:00:00',
     /*'sip' => 'YOURSIP',*/
     /*'cost_only' => true,*/
     /*'type' => 'toll'*/

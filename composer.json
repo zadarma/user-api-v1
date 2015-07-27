@@ -3,7 +3,10 @@
     "description": "PHP class for Zadarma API",
     "keywords": [
       "zadarma",
-      "api"
+      "api",
+      "sip",
+      "pbx",
+      "free calls"
     ],
     "type": "library",
     "license": "MIT",
@@ -20,7 +23,7 @@
     },
     "autoload": {
       "psr-4": {
-        "Zadarma_API\\": "src/"
+        "Zadarma_API\\": "lib/"
       }
     }
 }

@@ -1,7 +1,7 @@
 # Zadarma API - User class
 An official PHP class for work with Zadarma API.
 
-Allows to work with all API methods (including PBX, CallBack etc).
+Allows to work with all API methods (including VoIP, PBX, CallBack etc).
 
 ## Requirements:
 - PHP >= 5.3.0

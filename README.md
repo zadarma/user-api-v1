@@ -14,18 +14,19 @@ Keys for authorization are in [personal account](https://ss.zadarma.com/api/).
 
 ## Installation
 ### Via Сomposer
-```
-bash$ composer require "zadarma/user-api-v1"
+```sh
+composer require "zadarma/user-api-v1"
 ```
 ### Via Git
-```
-bash$ git clone git@github.com:zadarma/user-api-v1.git
+```sh
+git clone git@github.com:zadarma/user-api-v1.git
 ```
 Or just download "Client.php" from the folder "lib" and put it to your library folder.
 
 ###  Code example
-```
+```php
 <?php
+
 include_once '/PATH_TO/lib/Client.php';
 // include_once '/PATH_TO/vendor/autoload.php'; // or the path to your "vendor" autoload file
 

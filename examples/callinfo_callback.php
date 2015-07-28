@@ -1,5 +1,10 @@
 <?php
 
+/*
+ * Information about incoming calls
+ * Callback link for your site
+ */
+
 if (isset($_GET['zd_echo'])) exit($_GET['zd_echo']);
 
 if ($_POST) {

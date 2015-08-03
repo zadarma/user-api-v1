@@ -15,5 +15,5 @@ $answerObject = json_decode($answer);
 if ($answerObject->status == 'success') {
     echo 'Your Caller ID was successfully changed.';
 } else {
-    $answerObject->message;
+    echo $answerObject->message;
 }

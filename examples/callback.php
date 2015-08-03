@@ -16,5 +16,5 @@ $answerObject = json_decode($answer);
 if ($answerObject->status == 'success') {
     print_r($answerObject);
 } else {
-    $answerObject->message;
+    echo $answerObject->message;
 }

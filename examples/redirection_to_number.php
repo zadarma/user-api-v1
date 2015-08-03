@@ -16,5 +16,5 @@ $answerObject = json_decode($answer);
 if ($answerObject->status == 'success') {
     echo 'Redirection on your SIP "' . $answerObject->sip . " has been changed to " . $answerObject->destination . ".";
 } else {
-    $answerObject->message;
+    echo $answerObject->message;
 }

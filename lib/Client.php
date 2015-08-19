@@ -1,6 +1,7 @@
 <?php
 
 namespace Zadarma_API;
+use Exception;
 
 class Client
 {

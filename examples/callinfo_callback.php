@@ -22,7 +22,6 @@ if ($callerId && $calledDid && $callStart && ($remoteIp == ZADARMA_IP)) {
 
     if ($signature == $signatureTest) {
         // Do your actions
-
         /*
         // For each request you can easily change work scenario for current call by sending in response on information:
         echo json_encode(array(

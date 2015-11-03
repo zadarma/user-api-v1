@@ -1,7 +1,7 @@
 {
     "name": "zadarma/user-api-v1",
     "description": "PHP class for Zadarma API",
-    "version": "0.2",
+    "version": "1.0",
     "keywords": [
       "zadarma",
       "api",

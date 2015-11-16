@@ -15,7 +15,7 @@ $callerId = filter_input(INPUT_POST, 'caller_id'); // number of calling party;
 $calledDid = filter_input(INPUT_POST, 'called_did'); // number of called party;
 $callStart = filter_input(INPUT_POST, 'call_start'); // start time of call
 
-if ($callerId && $calledDid && $callStart && ($remoteIp == ZADARMA_IP)) {
+if ($callStart && ($remoteIp == ZADARMA_IP)) {
 
     $signature = getHeader('Signature');  // Signature is send only if you have your API key and secret
     $signatureTest = base64_encode(hash_hmac('sha1', $callerId . $calledDid . $callStart, API_SECRET));

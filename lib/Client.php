@@ -22,7 +22,7 @@ class Client
 
     public function __construct($key, $secret, $isSandbox = false)
     {
-        $this->_url = ($isSandbox) ? self::SANDBOX_URL : self::PROD_URL;
+        $this->_url = ($isSandbox) ? static::SANDBOX_URL : static::PROD_URL;
         $this->_key = $key;
         $this->_secret = $secret;
     }

@@ -3,7 +3,8 @@
 include_once 'include.php';
 
 $params = array(
-    'number' => '442037691880'
+    'number' => '48721000000',
+    'caller_id' => '49100000000' // optional
 );
 
 $zd = new \Zadarma_API\Client(KEY, SECRET);

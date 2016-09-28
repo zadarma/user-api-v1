@@ -8,7 +8,7 @@ $params = array(
 );
 
 $zd = new \Zadarma_API\Client(KEY, SECRET);
-$answer = $zd->call('/v1/info/price/', $params, 'put');
+$answer = $zd->call('/v1/sip/callerid/', $params, 'put');
 
 $answerObject = json_decode($answer);
 

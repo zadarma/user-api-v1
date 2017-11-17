@@ -10,7 +10,7 @@ Allows to work with all API methods (including VoIP, PBX, CallBack etc).
 ## How to use?
 An official documentation on Zadarma API is [here](https://zadarma.com/support/api/).
 
-Keys for authorization are in [personal account](https://ss.zadarma.com/api/).
+Keys for authorization are in [personal account](https://my.zadarma.com/api/).
 
 ## Installation
 ### Via Сomposer

@@ -3,11 +3,11 @@
 include_once 'include.php';
 
 $params = array(
-    'id' => 'YOURSIP',
-    'number' => '442037691880'
+    'id' => '101230',
+    'number' => '74991120101'
 );
 
-$zd = new \Zadarma_API\Client(KEY, SECRET);
+$zd = new \Zadarma_API\Client('05b259ec4036abdf4b15', '8c812526f60342c16c6c');
 $answer = $zd->call('/v1/sip/callerid/', $params, 'put');
 
 $answerObject = json_decode($answer);

@@ -77,8 +77,9 @@ class Client
         }
 
         curl_setopt_array($ch, $options);
-	echo "ch " . $ch . " \n $options \n";
+	echo "ch {$ch} \n";
 	print_r($options);
+	echo "\n";
         $response = curl_exec($ch);
         $error = curl_error($ch);
 

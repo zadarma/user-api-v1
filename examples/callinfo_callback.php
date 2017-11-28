@@ -8,7 +8,7 @@
 if (isset($_GET['zd_echo'])) exit($_GET['zd_echo']);
 
 define('ZADARMA_IP', '185.45.152.42');
-define('API_SECRET', 'YOUR_SECRET');  // You can get it from https://ss.zadarma.com/api/
+define('API_SECRET', 'YOUR_SECRET');  // You can get it from https://my.zadarma.com/api/
 
 $remoteIp = filter_input(INPUT_SERVER, 'REMOTE_ADDR');
 $callerId = filter_input(INPUT_POST, 'caller_id'); // number of calling party;

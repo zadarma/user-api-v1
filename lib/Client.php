@@ -64,10 +64,10 @@ class Client
         $ch = curl_init();
 
         if ($type == 'GET') {
-            $options[CURLOPT_URL] = $this->_url . $method . '?' . http_build_query($params);
+            $options[CURLOPT_URL] = $this->_url . $method . '?' . $this->_httpBuildQuery($params);
         } else {
             $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = http_build_query($params);
+            $options[CURLOPT_POSTFIELDS] = $this->_httpBuildQuery($params);
         }
 
         if ($isAuth) {
@@ -118,7 +118,7 @@ class Client
     private function _getAuthHeader($method, $params)
     {
         ksort($params);
-        $paramsString = http_build_query($params);
+        $paramsString = $this->_httpBuildQuery($params);
         $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->_secret));
 
         return array('Authorization: ' . $this->_key . ':' . $signature);
@@ -138,5 +138,17 @@ class Client
         }
 
         return strlen($line);
+    }
+
+    /**
+     * Build HTTP query
+     *
+     * @param array $params
+     *
+     * @return string
+     */
+    private function _httpBuildQuery($params = array())
+    {
+        return http_build_query($params, null, '&', PHP_QUERY_RFC1738);
     }
 }

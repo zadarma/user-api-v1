@@ -22,5 +22,8 @@
       "psr-4": {
         "Zadarma_API\\": "lib/"
       }
-    }
+    },
+    "require": {
+        "ext-curl": "*",
+    },
 }

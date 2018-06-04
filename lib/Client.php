@@ -67,7 +67,11 @@ class Client
             $options[CURLOPT_URL] = $this->_url . $method . '?' . $this->_httpBuildQuery($params);
         } else {
             $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = $this->_httpBuildQuery($params);
+            if(array_filter($params, 'is_object')){
+                $options[CURLOPT_POSTFIELDS] = $params;
+            }else{
+                $options[CURLOPT_POSTFIELDS] = $this->_httpBuildQuery($params);
+            }
         }
 
         if ($isAuth) {
@@ -117,6 +121,7 @@ class Client
 
     private function _getAuthHeader($method, $params)
     {
+        $params = array_filter($params, function($a){return !is_object($a);});
         ksort($params);
         $paramsString = $this->_httpBuildQuery($params);
         $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->_secret));

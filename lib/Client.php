@@ -8,11 +8,11 @@ class Client
     const PROD_URL = 'https://api.zadarma.com';
     const SANDBOX_URL = 'https://api-sandbox.zadarma.com';
 
-    private $_url;
-    private $_key;
-    private $_secret;
-    private $_httpCode;
-    private $_limits = array();
+    private $url;
+    private $key;
+    protected $secret;
+    private $httpCode;
+    private $limits = array();
 
     /**
      * @param $key
@@ -22,9 +22,9 @@ class Client
 
     public function __construct($key, $secret, $isSandbox = false)
     {
-        $this->_url = ($isSandbox) ? static::SANDBOX_URL : static::PROD_URL;
-        $this->_key = $key;
-        $this->_secret = $secret;
+        $this->url = $isSandbox ? static::SANDBOX_URL : static::PROD_URL;
+        $this->key = $key;
+        $this->secret = $secret;
     }
 
     /**
@@ -32,17 +32,16 @@ class Client
      * @param array $params - Query params
      * @param string $requestType - (get|post|put|delete)
      * @param string $format - (json|xml)
-     * @param bool|true $isAuth
      *
      * @return mixed
      * @throws Exception
      *
      */
 
-    public function call($method, $params = array(), $requestType = 'get', $format = 'json', $isAuth = true)
+    public function call($method, $params = array(), $requestType = 'get', $format = 'json')
     {
         if (!is_array($params)) {
-            throw new Exception('Query params must be an array.');
+            throw new ApiException('Query params must be an array.');
         }
 
         $type = strtoupper($requestType);
@@ -52,30 +51,27 @@ class Client
         $params['format'] = $format;
 
         $options = array(
-            CURLOPT_URL            => $this->_url . $method,
+            CURLOPT_URL            => $this->url . $method,
             CURLOPT_CUSTOMREQUEST  => $type,
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_HEADERFUNCTION => array($this, '_parseHeaders')
+            CURLOPT_HEADERFUNCTION => array($this, 'parseHeaders'),
+            CURLOPT_HTTPHEADER     => $this->getAuthHeader($method, $params),
         );
 
         $ch = curl_init();
 
         if ($type == 'GET') {
-            $options[CURLOPT_URL] = $this->_url . $method . '?' . $this->_httpBuildQuery($params);
+            $options[CURLOPT_URL] = $this->url . $method . '?' . $this->httpBuildQuery($params);
         } else {
             $options[CURLOPT_POST] = true;
             if(array_filter($params, 'is_object')){
                 $options[CURLOPT_POSTFIELDS] = $params;
             }else{
-                $options[CURLOPT_POSTFIELDS] = $this->_httpBuildQuery($params);
+                $options[CURLOPT_POSTFIELDS] = $this->httpBuildQuery($params);
             }
-        }
-
-        if ($isAuth) {
-            $options[CURLOPT_HTTPHEADER] = $this->_getAuthHeader($method, $params);
         }
 
         curl_setopt_array($ch, $options);
@@ -83,12 +79,12 @@ class Client
         $response = curl_exec($ch);
         $error = curl_error($ch);
 
-        $this->_httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $this->httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
 
         if ($error) {
-            throw new Exception($error);
+            throw new ApiException($error);
         }
 
         return $response;
@@ -100,7 +96,7 @@ class Client
 
     public function getHttpCode()
     {
-        return $this->_httpCode;
+        return $this->httpCode;
     }
 
     /**
@@ -109,7 +105,7 @@ class Client
 
     public function getLimits()
     {
-        return $this->_limits;
+        return $this->limits;
     }
 
     /**
@@ -119,14 +115,14 @@ class Client
      * @return array
      */
 
-    private function _getAuthHeader($method, $params)
+    private function getAuthHeader($method, $params)
     {
         $params = array_filter($params, function($a){return !is_object($a);});
         ksort($params);
-        $paramsString = $this->_httpBuildQuery($params);
-        $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->_secret));
+        $paramsString = $this->httpBuildQuery($params);
+        $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->secret));
 
-        return array('Authorization: ' . $this->_key . ':' . $signature);
+        return array('Authorization: ' . $this->key . ':' . $signature);
     }
 
     /**
@@ -136,10 +132,10 @@ class Client
      * @return int
      */
 
-    private function _parseHeaders($curl, $line)
+    private function parseHeaders($curl, $line)
     {
         if (preg_match('/^X-RateLimit-([a-z]+):\s([0-9]+)/i', $line, $match)) {
-            $this->_limits[$match[1]] = (int) $match[2];
+            $this->limits[$match[1]] = (int) $match[2];
         }
 
         return strlen($line);
@@ -152,7 +148,7 @@ class Client
      *
      * @return string
      */
-    private function _httpBuildQuery($params = array())
+    private function httpBuildQuery($params = array())
     {
         return http_build_query($params, null, '&', PHP_QUERY_RFC1738);
     }

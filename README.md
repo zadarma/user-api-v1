@@ -4,7 +4,7 @@ An official PHP class for work with Zadarma API.
 Allows to work with all API methods (including VoIP, PBX, CallBack etc).
 
 ## Requirements:
-- PHP >= 5.3.0
+- PHP >= 5.5.0
 - cURL
 
 ## How to use?
@@ -26,14 +26,27 @@ or just add this line to your `composer.json` file:
 ```sh
 git clone git@github.com:zadarma/user-api-v1.git
 ```
-Or just download "Client.php" from the folder "lib" and put it to your library folder.
 
-###  Code example
+###  \Zadarma_API\Api call code example
+```php
+<?php
+include_once '/PATH/TO/vendor/autoload.php'; 
+$api = new \Zadarma_API\Api(KEY, SECRET, true);
+try{
+    $result = $api->getSipStatus('YOURSIP');
+    echo $result->sip.' status: '.($result->is_online ? 'online' : 'offline');
+} catch (\Zadarma_API\ApiException $e) {
+    echo 'Error: '.$e->getMessage();
+}
+
+```
+All other examples you can see in the "[example file](https://github.com/zadarma/user-api-v1/tree/master/examples/index.php)".
+
+###  \Zadarma_API\Client call code example
 ```php
 <?php
 
 include_once '/PATH/TO/lib/Client.php';
-// include_once '/PATH/TO/vendor/autoload.php'; // or the path to your "vendor" autoload file
 
 $params = array(
     'id' => 'YOURSIP',

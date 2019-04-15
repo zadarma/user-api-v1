@@ -603,7 +603,7 @@ class Api extends Client
                 return null;
         }
 
-        if ($signature != base64_encode(hash_hmac('sha1', $notify->getSignatureString(), $this->secret))) {
+        if ($signature != $this->encodeSignature($notify->getSignatureString())) {
             return null;
         }
 

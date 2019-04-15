@@ -10,7 +10,7 @@ class Client
 
     private $url;
     private $key;
-    protected $secret;
+    private $secret;
     private $httpCode;
     private $limits = array();
 
@@ -19,7 +19,6 @@ class Client
      * @param $secret
      * @param bool|false $isSandbox
      */
-
     public function __construct($key, $secret, $isSandbox = false)
     {
         $this->url = $isSandbox ? static::SANDBOX_URL : static::PROD_URL;
@@ -37,7 +36,6 @@ class Client
      * @throws Exception
      *
      */
-
     public function call($method, $params = array(), $requestType = 'get', $format = 'json')
     {
         if (!is_array($params)) {
@@ -93,7 +91,6 @@ class Client
     /**
      * @return int
      */
-
     public function getHttpCode()
     {
         return $this->httpCode;
@@ -102,10 +99,18 @@ class Client
     /**
      * @return array
      */
-
     public function getLimits()
     {
         return $this->limits;
+    }
+
+    /**
+     * @param $signatureString
+     * @return string
+     */
+    public function encodeSignature($signatureString)
+    {
+        return base64_encode(hash_hmac('sha1', $signatureString, $this->secret));
     }
 
     /**
@@ -114,13 +119,12 @@ class Client
      *
      * @return array
      */
-
     private function getAuthHeader($method, $params)
     {
         $params = array_filter($params, function($a){return !is_object($a);});
         ksort($params);
         $paramsString = $this->httpBuildQuery($params);
-        $signature = base64_encode(hash_hmac('sha1', $method . $paramsString . md5($paramsString), $this->secret));
+        $signature = $this->encodeSignature($method . $paramsString . md5($paramsString));
 
         return array('Authorization: ' . $this->key . ':' . $signature);
     }
@@ -131,7 +135,6 @@ class Client
      *
      * @return int
      */
-
     private function parseHeaders($curl, $line)
     {
         if (preg_match('/^X-RateLimit-([a-z]+):\s([0-9]+)/i', $line, $match)) {

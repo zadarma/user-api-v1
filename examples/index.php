@@ -4,7 +4,8 @@ use Zadarma_API\Api;
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'include.php';
 
-$api = new Api(KEY, SECRET, true);
+define('USE_SANDBOX', true);
+$api = new Api(KEY, SECRET, USE_SANDBOX);
 
 // TODO: enter your values
 $sourceNumber = ''; // in international format

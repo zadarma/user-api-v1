@@ -31,7 +31,7 @@ git clone git@github.com:zadarma/user-api-v1.git
 ```php
 <?php
 include_once '/PATH/TO/vendor/autoload.php'; 
-$api = new \Zadarma_API\Api(KEY, SECRET, true);
+$api = new \Zadarma_API\Api(KEY, SECRET, USE_SANDBOX);
 try{
     $result = $api->getSipStatus('YOURSIP');
     echo $result->sip.' status: '.($result->is_online ? 'online' : 'offline');

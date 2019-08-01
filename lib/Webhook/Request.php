@@ -88,10 +88,6 @@ class Request
      */
     public function send($return = false)
     {
-        if (isset($this->data['ivr_play']) && !isset($this->data['wait_dtmf'])) {
-            throw new \BadMethodCallException('setWaitDtmf must be called before send.');
-        }
-
         $result = json_encode($this->data);
         if ($return) {
             return $result;

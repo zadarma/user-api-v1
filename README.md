@@ -6,6 +6,7 @@ Allows to work with all API methods (including VoIP, PBX, CallBack etc).
 ## Requirements:
 - PHP >= 5.5.0
 - cURL
+- TLS v1.1 or TLS v1.2
 
 ## How to use?
 An official documentation on Zadarma API is [here](https://zadarma.com/support/api/).

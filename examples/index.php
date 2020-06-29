@@ -1,5 +1,7 @@
 <?php
 
+include_once __DIR__ . '/../vendor/autoload.php';
+
 use Zadarma_API\Api;
 
 require_once __DIR__.DIRECTORY_SEPARATOR.'include.php';
@@ -48,6 +50,8 @@ $result = $api->getStatistics();
 $result = $api->getPbxStatistics();
 $result = $api->getDirectNumbers();
 
+// zcrm methods
+$result = $api->zcrmRequest('/users' );
 
 // other methods
 $result = $api->requestCallback($pbx, $destinationNumber);

@@ -48,6 +48,8 @@ $result = $api->getStatistics();
 $result = $api->getPbxStatistics();
 $result = $api->getDirectNumbers();
 
+// zcrm methods
+$result = $api->zcrmRequest('/users' );
 
 // other methods
 $result = $api->requestCallback($pbx, $destinationNumber);

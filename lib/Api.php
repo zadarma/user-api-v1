@@ -25,6 +25,7 @@ use Zadarma_API\Response\Sms;
 use Zadarma_API\Response\Statistics;
 use Zadarma_API\Response\Tariff;
 use Zadarma_API\Response\Timezone;
+use Zadarma_API\Response\Zcrm;
 use Zadarma_API\Webhook\AbstractNotify;
 use Zadarma_API\Webhook\NotifyAnswer;
 use Zadarma_API\Webhook\NotifyEnd;
@@ -611,6 +612,28 @@ class Api extends Client
     }
 
     /**
+     * @param $method
+     * @param array $params
+     * @param string $requestType
+     * @return Zcrm
+     * @throws ApiException
+     */
+    public function zcrmRequest($method, $params = [], $requestType = 'get')
+    {
+        $result = $this->call('/' . self::VERSION . '/zcrm' . $method, $params, $requestType);
+
+        $result = json_decode($result, true);
+        if ((!empty($result['status']) && $result['status'] == 'error') || $this->getHttpCode() >= 400) {
+            throw new ApiException(isset($result['data']) ? $result['data'] : '', $this->getHttpCode());
+        }
+        if ($result === null) {
+            throw new ApiException('Wrong response', $this->getHttpCode());
+        }
+
+        return new Zcrm($result);
+    }
+
+    /**
      * Make request to api with error checking.
      *
      * @param $method
@@ -622,6 +645,7 @@ class Api extends Client
     public function request($method, $params = [], $requestType = 'get')
     {
         $result = $this->call('/' . self::VERSION . '/' . $method . '/', $params, $requestType);
+
         $result = json_decode($result, true);
         if ((!empty($result['status']) && $result['status'] == 'error') || $this->getHttpCode() >= 400) {
             throw new ApiException($result['message'], $this->getHttpCode());

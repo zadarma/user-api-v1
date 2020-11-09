@@ -58,3 +58,6 @@ $result = $api->numberLookup($destinationNumber);
 $result = $api->numberLookupMultiple([$sourceNumber, $destinationNumber]);
 
 $result = $api->sendSms($destinationNumber, 'text', $sourceNumber);
+
+$result = $api->startSpeechRecognition($callId);
+$result = $api->getSpeechRecognitionResult($callId);

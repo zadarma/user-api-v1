@@ -22,6 +22,7 @@ use Zadarma_API\Response\Sip;
 use Zadarma_API\Response\SipCaller;
 use Zadarma_API\Response\SipStatus;
 use Zadarma_API\Response\Sms;
+use Zadarma_API\Response\SpeechRecognition;
 use Zadarma_API\Response\Statistics;
 use Zadarma_API\Response\Tariff;
 use Zadarma_API\Response\Timezone;
@@ -536,6 +537,50 @@ class Api extends Client
         }
         $data = $this->request('pbx/redirection', $params, 'post');
         return new PbxRedirection($data);
+    }
+
+    /**
+     * Start speech recognition.
+     * @param string $callId Unique call ID, it is specified in the name of the file with the call
+     *  recording (unique for every recording)
+     * @param null|string $lang recognition language (not required)
+     * @return bool
+     * @throws ApiException
+     */
+    public function startSpeechRecognition($callId, $lang = null)
+    {
+        $params = [
+            'call_id' => $callId,
+        ];
+        if ($lang) {
+            $params['lang'] = $lang;
+        }
+        $data = $this->request('speech_recognition', $params, 'put');
+        return $data['status'] == 'success';
+    }
+
+    /**
+     * Obtaining recognition results.
+     * @param string $callId Unique call ID, it is specified in the name of the file with the call
+     *  recording (unique for every recording)
+     * @param null|string $lang recognition language (not required)
+     * @param bool $returnWords return words or phrases
+     * @param bool $returnAlternatives return alternative results
+     * @return SpeechRecognition
+     * @throws ApiException
+     */
+    public function getSpeechRecognitionResult($callId, $lang = null, $returnWords = false, $returnAlternatives = false)
+    {
+        $params = [
+            'call_id' => $callId,
+            'return' => $returnWords ? 'words' : 'phrases',
+            'alternatives' => (int)$returnAlternatives,
+        ];
+        if ($lang) {
+            $params['lang'] = $lang;
+        }
+        $data = $this->request('speech_recognition', $params, 'get');
+        return new SpeechRecognition($data);
     }
 
     /**

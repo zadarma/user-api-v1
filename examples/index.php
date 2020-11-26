@@ -61,3 +61,4 @@ $result = $api->sendSms($destinationNumber, 'text', $sourceNumber);
 
 $result = $api->startSpeechRecognition($callId);
 $result = $api->getSpeechRecognitionResult($callId);
+$result = $api->getWebrtcKey($sip);

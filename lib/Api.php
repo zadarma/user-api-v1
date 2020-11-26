@@ -26,6 +26,7 @@ use Zadarma_API\Response\SpeechRecognition;
 use Zadarma_API\Response\Statistics;
 use Zadarma_API\Response\Tariff;
 use Zadarma_API\Response\Timezone;
+use Zadarma_API\Response\WebrtcKey;
 use Zadarma_API\Response\Zcrm;
 use Zadarma_API\Webhook\AbstractNotify;
 use Zadarma_API\Webhook\NotifyAnswer;
@@ -676,6 +677,17 @@ class Api extends Client
         }
 
         return new Zcrm($result);
+    }
+
+    /**
+     * Get a key for a webrtc widget.
+     * @param string $sipLogin SIP login or login of PBX extension number
+     * @return WebrtcKey
+     * @throws ApiException
+     */
+    public function getWebrtcKey($sipLogin)
+    {
+        return new WebrtcKey($this->request('webrtc/get_key', ['sip' => $sipLogin]));
     }
 
     /**

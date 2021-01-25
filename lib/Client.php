@@ -11,6 +11,9 @@ class Client
     private $url;
     private $key;
     private $secret;
+    private $proxyUrl;
+    private $proxyAuth;
+    private $proxyType;
     private $httpCode;
     private $limits = array();
 
@@ -24,6 +27,20 @@ class Client
         $this->url = $isSandbox ? static::SANDBOX_URL : static::PROD_URL;
         $this->key = $key;
         $this->secret = $secret;
+    }
+
+    /**
+     * Allow using proxy for requests
+     *
+     * @param string $url - Proxy details with port
+     * @param null|string $auth -  Use if proxy have username and password
+     * @param null|int $type - CURLOPT_PROXYTYPE (@see https://www.php.net/manual/ru/function.curl-setopt.php)
+     */
+    public function setProxy($url, $auth = null, $type = null)
+    {
+        $this->proxyUrl = $url;
+        $this->proxyAuth = $auth;
+        $this->proxyType = $type;
     }
 
     /**
@@ -58,6 +75,16 @@ class Client
             CURLOPT_HEADERFUNCTION => array($this, 'parseHeaders'),
             CURLOPT_HTTPHEADER     => $this->getAuthHeader($method, $params),
         );
+
+        if ($this->proxyUrl) {
+            $options[CURLOPT_PROXY] = $this->proxyUrl;
+            if ($this->proxyAuth) {
+                $options[CURLOPT_PROXYUSERPWD] = $this->proxyAuth;
+            }
+            if ($this->proxyType) {
+                $options[CURLOPT_PROXYTYPE] = $this->proxyType;
+            }
+        }
 
         $ch = curl_init();
 

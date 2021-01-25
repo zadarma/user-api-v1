@@ -7,6 +7,12 @@ require_once __DIR__.DIRECTORY_SEPARATOR.'include.php';
 define('USE_SANDBOX', true);
 $api = new Api(KEY, SECRET, USE_SANDBOX);
 
+// Optionally you can setup proxy url
+// define('PROXY_URL', '192.168.0.1:50000');
+// define('PROXY_AUTH', 'username:password');
+// define('PROXY_TYPE', CURLPROXY_HTTP);
+// $api->setProxy(PROXY_URL, PROXY_AUTH, PROXY_TYPE);
+
 // TODO: enter your values
 $sourceNumber = ''; // in international format
 $destinationNumber = '';

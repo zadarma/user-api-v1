@@ -1,11 +1,10 @@
 <?php
 
-
 namespace Zadarma_API;
-
 
 use Zadarma_API\Response\Balance;
 use Zadarma_API\Response\DirectNumber;
+use Zadarma_API\Response\IncomingCallsStatistics;
 use Zadarma_API\Response\NumberLookup;
 use Zadarma_API\Response\PbxInternal;
 use Zadarma_API\Response\PbxRecording;
@@ -328,7 +327,34 @@ class Api extends Client
         ];
         $data = $this->request('statistics/callback_widget', self::filterParams($params));
         return new PbxStatistics($data);
+    }
 
+    /**
+     * Return overall incoming calls statistics.
+     * Maximum period of getting statistics is - 1 month. If the limit in the request is exceeded, the time period
+     * automatically decreases to 30 days. If the start date is not specified, the start of the current month will be
+     * selected. If the end date is not specified, the current date and time will be selected.
+     *
+     * @param string|null $start The start date of the statistics display (format - y-m-d H:i:s)
+     * @param string|null $end The end date of the statistics display (format - y-m-d H:i:s)
+     * @param integer|null $sip Filter based on a specific SIP number
+     * @param integer|null $skip Number of lines to be skipped in the sample. The output begins from skip +1 line.
+     * @param integer|null $limit The limit on the number of input lines
+     *  (the maximum value is 1000, the default value is 1000)
+     * @return IncomingCallsStatistics
+     * @throws ApiException
+     */
+    public function getIncomingCallStatistics($start = null, $end = null, $sip = null, $skip = null, $limit = null)
+    {
+        $params = [
+            'start' => $start,
+            'end' => $end,
+            'sip' => is_null($sip) ? null : self::filterNumber($sip),
+            'skip' => $skip,
+            'limit' => $limit,
+        ];
+        $data = $this->request('statistics/incoming-calls', self::filterParams($params));
+        return new IncomingCallsStatistics($data);
     }
 
     /**

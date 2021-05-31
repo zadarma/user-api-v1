@@ -25,6 +25,7 @@ $result = $api->getTariff();
 // pbx methods
 $result = $api->getPbxInternal();
 $result = $api->getPbxStatus($pbx);
+$result = $api->getPbxInfo($pbx);
 $result = $api->getPbxRecord($callId, null);
 $result = $api->getPbxRedirection($pbx);
 

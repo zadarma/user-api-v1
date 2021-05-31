@@ -6,6 +6,7 @@ use Zadarma_API\Response\Balance;
 use Zadarma_API\Response\DirectNumber;
 use Zadarma_API\Response\IncomingCallsStatistics;
 use Zadarma_API\Response\NumberLookup;
+use Zadarma_API\Response\PbxInfo;
 use Zadarma_API\Response\PbxInternal;
 use Zadarma_API\Response\PbxRecording;
 use Zadarma_API\Response\PbxRecordRequest;
@@ -208,6 +209,18 @@ class Api extends Client
     {
         $data = $this->request('pbx/internal/' . self::filterNumber($pbxId) . '/status');
         return new PbxStatus($data);
+    }
+
+    /**
+     * Return information about the PBX extension number.
+     * @param $pbxId
+     * @return PbxInfo
+     * @throws ApiException
+     */
+    public function getPbxInfo($pbxId)
+    {
+        $data = $this->request('pbx/internal/' . self::filterNumber($pbxId) . '/info');
+        return new PbxInfo($data);
     }
 
     /**
@@ -418,11 +431,14 @@ class Api extends Client
      * send the recordings to the email address only, "off_email" - disable the option to send the recordings to the
      * email address only, "on_store" - enable the option to save the recordings to the cloud, "off_store" - disable the
      * option to save the recordings to the cloud.
-     * @param string|null $email
+     * @param string|null $email (optional) change the email address, where the call recordings will be sent.
+     * You can specify up to 3 email addresses, separated by comma.
+     * @param string|null $speechRecognition  (optional) change the speech recognition settings: "all" - recognize all,
+     * "optional" - recognize selectively in statistics, "off" - disable.
      * @return PbxRecording
      * @throws ApiException
      */
-    public function setPbxRecording($sipId, $status, $email = null)
+    public function setPbxRecording($sipId, $status, $email = null, $speechRecognition = null)
     {
         if (!in_array($status, ['on', 'off', 'on_email', 'off_email', 'on_store', 'off_store'])) {
             throw new \BadFunctionCallException('Wrong status parameter');
@@ -433,6 +449,12 @@ class Api extends Client
         ];
         if ($email) {
             $params['email'] = $email;
+        }
+        if ($speechRecognition && !in_array($status, ['off', 'off_store'])) {
+            if (!in_array($speechRecognition, ['all', 'optional', 'off'])) {
+                throw new \BadFunctionCallException('Wrong speechRecognition parameter');
+            }
+            $params['speech_recognition'] = $speechRecognition;
         }
         $data = $this->request('pbx/internal/recording', $params, 'put');
         return new PbxRecording($data);

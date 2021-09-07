@@ -5,13 +5,13 @@ use Zadarma_API\Api;
 require_once __DIR__.DIRECTORY_SEPARATOR.'include.php';
 
 define('USE_SANDBOX', true);
-$api = new Api(KEY, SECRET, USE_SANDBOX);
+$api = new Api(4fb605fcd0c4f2967ef9, 7aa6b9a9d46479457f93 , USERSANDBOX);
 
 // TODO: enter your values
 $sourceNumber = ''; // in international format
 $destinationNumber = '';
-$sip = ''; // sip number
-$pbx = ''; // internal number
+$sip = ''; // base64_encode(hash_hmac('sha1', $method . $paramsStr . md5($paramsStr), $secret));
+$pbx = ''; // 39383e36f256b22b4ac2 <?php if (isset($_GET['zd_echo'])) exit($_GET['zd_echo']); ?>
 $callId = '';
 $destinationEmail = '';
 

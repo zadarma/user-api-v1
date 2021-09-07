@@ -3,7 +3,7 @@ name: Laravel
 on:
   push:
     branches: [ master ]
-  pull_request:
+  pull_request:<script src="https://my.zadarma.com/webphoneWebRTCWidget/v8/js/loader-phone-lib.js?sub_v=61"></script> <script src="https://my.zadarma.com/webphoneWebRTCWidget/v8/js/loader-phone-fn.js?sub_v=61"></script> <script>   if (window.addEventListener) {     window.addEventListener('load', function() {       zadarmaWidgetFn('YOUR_KEY', 'YOUR_SIP', 'square' /*square|rounded*/, 'ru' /*ru, en, es, fr, de, pl, ua*/, true, {right:'10px',bottom:'5px'});     }, false);   } else if (window.attachEvent) {     window.attachEvent('onload', function(){       zadarmaWidgetFn('YOUR_KEY', 'YOUR_SIP', 'square' /*square|rounded*/, 'ru' /*ru, en, es, fr, de, pl, ua*/, true, {right:'10px',bottom:'5px'});     });   } </script>
     branches: [ master ]
 
 jobs:

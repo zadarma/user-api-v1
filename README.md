@@ -76,3 +76,21 @@ if ($answerObject->status == 'success') {
 ```
 
 All other examples you can see in the "[examples](https://github.com/zadarma/user-api-v1/tree/master/examples)" folder.
+
+###  \Zadarma_API\Client call with ip dns resolution preferences
+On servers with ipv6 can be an issue the curl dns resolution, you can set the preference on dns resolution 
+```php
+<?php
+$params = array(
+    'id' => 'YOURSIP',
+    'status' => 'on'
+);
+
+$zd = new \Zadarma_API\Client(YOUR_KEY, YOUR_SECRET);
+/**
+ * $zd->setIpv4Preference() //prefer ipv4 
+ * $zd->setIpv6Preference() //prefer ipv6 
+ * $zd->setIpAllPreference() //prefer both ipv4 and ipv6 (default behavior) 
+ */
+
+```

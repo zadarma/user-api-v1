@@ -13,6 +13,7 @@ class Client
     private $secret;
     private $httpCode;
     private $limits = array();
+    private $ipPreferences = CURL_IPRESOLVE_WHATEVER;
 
     /**
      * @param $key
@@ -57,6 +58,7 @@ class Client
             CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_HEADERFUNCTION => array($this, 'parseHeaders'),
             CURLOPT_HTTPHEADER     => $this->getAuthHeader($method, $params),
+            CURLOPT_IPRESOLVE => $this->ipPreferences
         );
 
         $ch = curl_init();
@@ -102,6 +104,33 @@ class Client
     public function getLimits()
     {
         return $this->limits;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setIpv4Preference()
+    {
+        $this->ipPreferences = CURL_IPRESOLVE_V4;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setIpv6Preference()
+    {
+        $this->ipPreferences = CURL_IPRESOLVE_V6;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setIpAllPreference()
+    {
+        $this->ipPreferences = CURL_IPRESOLVE_WHATEVER;
+        return $this;
     }
 
     /**

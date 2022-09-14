@@ -10,7 +10,7 @@ class Request
 
     public static function getSupportedLanguages()
     {
-        return ['ru', 'ua', 'en', 'es', 'pl'];
+        return ['ru', 'ua', 'en', 'es', 'pl', 'fr', 'de'];
     }
 
     public function setIvrPlay($id)
@@ -49,10 +49,17 @@ class Request
         return $this;
     }
 
-    public function setRedirect($redirect, $returnTimeout)
+    public function setRedirect($redirect, $returnTimeout, array $extraOptions = [])
     {
         $this->data['redirect'] = $redirect;
         $this->data['return_timeout'] = (int)$returnTimeout;
+        if (!empty($extraOptions['rewrite_forward_number'])) {
+            $number = (string)$extraOptions['rewrite_forward_number'];
+            if (!preg_match('/^(\+*\d{5,})$/', $number)) {
+                throw new \BadMethodCallException("Wrong 'rewrite_forward_number' extra option value.");
+            }
+            $this->data['rewrite_forward_number'] = $number;
+        }
         return $this;
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace Zadarma_API;
+
 use Exception;
 
 class Client
@@ -12,7 +13,7 @@ class Client
     private $key;
     private $secret;
     private $httpCode;
-    private $limits = array();
+    private $limits = [];
 
     /**
      * @param $key
@@ -36,28 +37,28 @@ class Client
      * @throws Exception
      *
      */
-    public function call($method, $params = array(), $requestType = 'get', $format = 'json')
+    public function call($method, $params = [], $requestType = 'get', $format = 'json')
     {
         if (!is_array($params)) {
             throw new ApiException('Query params must be an array.');
         }
 
         $type = strtoupper($requestType);
-        if (!in_array($type, array('GET', 'POST', 'PUT', 'DELETE'))) {
+        if (!in_array($type, ['GET', 'POST', 'PUT', 'DELETE'])) {
             $type = 'GET';
         }
         $params['format'] = $format;
 
-        $options = array(
-            CURLOPT_URL            => $this->url . $method,
-            CURLOPT_CUSTOMREQUEST  => $type,
+        $options = [
+            CURLOPT_URL => $this->url . $method,
+            CURLOPT_CUSTOMREQUEST => $type,
             CURLOPT_CONNECTTIMEOUT => 10,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
-            CURLOPT_HEADERFUNCTION => array($this, 'parseHeaders'),
-            CURLOPT_HTTPHEADER     => $this->getAuthHeader($method, $params),
-        );
+            CURLOPT_HEADERFUNCTION => [$this, 'parseHeaders'],
+            CURLOPT_HTTPHEADER => $this->getAuthHeader($method, $params),
+        ];
 
         $ch = curl_init();
 
@@ -65,9 +66,9 @@ class Client
             $options[CURLOPT_URL] = $this->url . $method . '?' . $this->httpBuildQuery($params);
         } else {
             $options[CURLOPT_POST] = true;
-            if(array_filter($params, 'is_object')){
+            if (array_filter($params, 'is_object')) {
                 $options[CURLOPT_POSTFIELDS] = $params;
-            }else{
+            } else {
                 $options[CURLOPT_POSTFIELDS] = $this->httpBuildQuery($params);
             }
         }
@@ -121,12 +122,14 @@ class Client
      */
     private function getAuthHeader($method, $params)
     {
-        $params = array_filter($params, function($a){return !is_object($a);});
+        $params = array_filter($params, function ($a) {
+            return !is_object($a);
+        });
         ksort($params);
         $paramsString = $this->httpBuildQuery($params);
         $signature = $this->encodeSignature($method . $paramsString . md5($paramsString));
 
-        return array('Authorization: ' . $this->key . ':' . $signature);
+        return ['Authorization: ' . $this->key . ':' . $signature];
     }
 
     /**
@@ -138,7 +141,7 @@ class Client
     private function parseHeaders($curl, $line)
     {
         if (preg_match('/^X-RateLimit-([a-z]+):\s([0-9]+)/i', $line, $match)) {
-            $this->limits[$match[1]] = (int) $match[2];
+            $this->limits[$match[1]] = (int)$match[2];
         }
 
         return strlen($line);
@@ -151,8 +154,8 @@ class Client
      *
      * @return string
      */
-    private function httpBuildQuery($params = array())
+    private function httpBuildQuery($params = [])
     {
-        return http_build_query($params, null, '&', PHP_QUERY_RFC1738);
+        return http_build_query($params, '', '&', PHP_QUERY_RFC1738);
     }
 }

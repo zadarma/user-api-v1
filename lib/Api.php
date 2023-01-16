@@ -277,9 +277,15 @@ class Api extends Client
      * @return Statistics
      * @throws ApiException
      */
-    public function getStatistics($start = null, $end = null, $sip = null, $costOnly = null, $type = null, $skip = null,
-                                  $limit = null)
-    {
+    public function getStatistics(
+        $start = null,
+        $end = null,
+        $sip = null,
+        $costOnly = null,
+        $type = null,
+        $skip = null,
+        $limit = null
+    ) {
         $params = [
             'start' => $start,
             'end' => $end,
@@ -306,9 +312,14 @@ class Api extends Client
      * @return PbxStatistics
      * @throws ApiException
      */
-    public function getPbxStatistics($start = null, $end = null, $newFormat = true, $callType = null,
-                                     $skip = null, $limit = null)
-    {
+    public function getPbxStatistics(
+        $start = null,
+        $end = null,
+        $newFormat = true,
+        $callType = null,
+        $skip = null,
+        $limit = null
+    ) {
         $params = [
             'start' => $start,
             'end' => $end,
@@ -463,20 +474,20 @@ class Api extends Client
     /**
      * Sending the SMS messages.
      *
-     * @param string number Phone number, where to send the SMS message (several numbers can be specified,
-     * separated by comma);
-     * @param string message Message (standard text limit applies; the text will be separated into several SMS messages,
+     * @param string|array $to Phone number(s), where to send the SMS message (array of numbers can be specified);
+     * @param string $message Message (standard text limit applies; the text will be separated into several SMS messages,
      *  if the limit is exceeded);
-     * @param string caller_id Phone number, from which the SMS messages is sent (can be sent only from list of user's
+     * @param string $callerId Phone number, from which the SMS messages is sent (can be sent only from list of user's
      *  confirmed phone numbers).
      * @return Sms
      * @throws ApiException
      */
     public function sendSms($to, $message, $callerId = null)
     {
+        $to = array_map([self::class, 'filterNumber'], is_array($to) ? $to : [$to]);
         $params = [
-            'number' => self::filterNumber($to),
-            'message' => $message
+            'number' => implode(',', $to),
+            'message' => $message,
         ];
         if ($callerId) {
             $params['caller_id'] = $callerId;
@@ -564,9 +575,12 @@ class Api extends Client
         if (!filter_var($destination, FILTER_VALIDATE_EMAIL)) {
             throw new \BadFunctionCallException('Wrong email parameter');
         }
-        if (!in_array($greeting, [self::PBX_REDIRECTION_NO_GREETING, self::PBX_REDIRECTION_OWN_GREETING,
-            self::PBX_REDIRECTION_STANDART_GREETING])
-        ) {
+        $allowedRedirections = [
+            self::PBX_REDIRECTION_NO_GREETING,
+            self::PBX_REDIRECTION_OWN_GREETING,
+            self::PBX_REDIRECTION_STANDART_GREETING
+        ];
+        if (!in_array($greeting, $allowedRedirections)) {
             throw new \BadFunctionCallException('Wrong voicemailGreeting parameter');
         }
         $params = [
@@ -577,9 +591,11 @@ class Api extends Client
             'voicemail_greeting' => $greeting,
         ];
         if ($greeting == self::PBX_REDIRECTION_OWN_GREETING) {
-            if( !$greetingFile || !file_exists($greetingFile) ||
-                !in_array(pathinfo($greetingFile, PATHINFO_EXTENSION), ['wav', 'mp3'])
-            ){
+            if (
+                !$greetingFile
+                || !file_exists($greetingFile)
+                || !in_array(pathinfo($greetingFile, PATHINFO_EXTENSION), ['wav', 'mp3'])
+            ) {
                 throw new \BadFunctionCallException('Greeting file does not exist or has wrong extension.');
             }
             $params['greeting_file'] = curl_file_create($greetingFile);

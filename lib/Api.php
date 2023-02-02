@@ -37,6 +37,8 @@ use Zadarma_API\Webhook\NotifyOutEnd;
 use Zadarma_API\Webhook\NotifyOutStart;
 use Zadarma_API\Webhook\NotifyRecord;
 use Zadarma_API\Webhook\NotifyStart;
+use Zadarma_API\Webhook\NotifySpeechRecognition;
+use Zadarma_API\Webhook\NotifySms;
 
 class Api extends Client
 {
@@ -708,6 +710,14 @@ class Api extends Client
 
             case AbstractNotify::EVENT_RECORD:
                 $notify = new NotifyRecord($postData);
+                break;
+
+            case AbstractNotify::EVENT_SPEECH_RECOGNITION:
+                $notify = new NotifySpeechRecognition($postData);
+                break;
+
+            case AbstractNotify::EVENT_SMS:
+                $notify = new NotifySms($postData);
                 break;
 
             default:

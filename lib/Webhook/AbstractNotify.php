@@ -12,6 +12,8 @@ abstract class AbstractNotify extends \Zadarma_API\Response\Response
     const EVENT_OUT_END = 'NOTIFY_OUT_END';
     const EVENT_RECORD = 'NOTIFY_RECORD';
     const EVENT_IVR = 'NOTIFY_IVR';
+    const EVENT_SPEECH_RECOGNITION = 'SPEECH_RECOGNITION';
+    const EVENT_SMS = 'SMS';
 
     public $event;
 
